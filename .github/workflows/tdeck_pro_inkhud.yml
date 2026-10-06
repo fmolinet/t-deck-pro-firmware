@@ -1,0 +1,36 @@
+name: T-Deck Pro InkHUD
+
+on:
+  push:
+    branches:
+      - "t-deck-pro-**"
+  workflow_dispatch:
+
+permissions: read-all
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Get release version string
+        id: version
+        run: echo "long=$(./bin/buildinfo.py long)" >> $GITHUB_OUTPUT
+        env:
+          BUILD_LOCATION: local
+    outputs:
+      long: ${{ steps.version.outputs.long }}
+
+  build:
+    needs: version
+    strategy:
+      fail-fast: false
+      matrix:
+        pio_env:
+          - t-deck-pro-inkhud
+          - t-deck-pro-v1_1-inkhud
+    uses: ./.github/workflows/build_firmware.yml
+    with:
+      version: ${{ needs.version.outputs.long }}
+      platform: esp32s3
+      pio_env: ${{ matrix.pio_env }}

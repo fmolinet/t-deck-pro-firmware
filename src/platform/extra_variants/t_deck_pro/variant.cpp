@@ -1,6 +1,6 @@
 #include "configuration.h"
 
-#ifdef T_DECK_PRO
+#if defined(T_DECK_PRO) && HAS_TOUCHSCREEN
 
 #include "input/TouchScreenImpl1.h"
 #include <CSE_CST328.h>

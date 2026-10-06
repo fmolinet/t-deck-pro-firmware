@@ -3,6 +3,7 @@
 #include "./InkHUD.h"
 
 #include "./Applet.h"
+#include "./Applets/System/Menu/MenuApplet.h"
 #include "./Events.h"
 #include "./Persistence.h"
 #include "./Renderer.h"
@@ -355,6 +356,17 @@ void InkHUD::InkHUD::freeTextCancel()
     events->onFreeTextCancel();
 }
 
+// Is a system applet currently collecting freetext?
+// Lets a physical keyboard decide whether a keypress is text or navigation
+bool InkHUD::InkHUD::isFreeTextActive()
+{
+    for (SystemApplet *sa : systemApplets) {
+        if (sa->handleFreeText)
+            return true;
+    }
+    return false;
+}
+
 // Cycle the next user applet to the foreground
 // Only activated applets are cycled
 // If user has a multi-applet layout, the applets will cycle on the "focused tile"
@@ -400,6 +412,17 @@ void InkHUD::InkHUD::openAlignStick()
 void InkHUD::InkHUD::openKeyboard()
 {
     windowManager->openKeyboard();
+}
+
+// Open the menu and begin freetext entry immediately
+// Intended for devices with a physical keyboard, where composing a message should be one keypress
+void InkHUD::InkHUD::composeMessage()
+{
+    MenuApplet *menu = (MenuApplet *)getSystemApplet("Menu");
+    if (!menu)
+        return;
+    openMenu();
+    menu->beginFreeText();
 }
 
 // Close the on-screen keyboard

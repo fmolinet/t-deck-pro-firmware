@@ -1,4 +1,6 @@
 // Based on the MPR121 Keyboard and Adafruit TCA8418 library
+#pragma once
+
 #include "configuration.h"
 #include <Wire.h>
 

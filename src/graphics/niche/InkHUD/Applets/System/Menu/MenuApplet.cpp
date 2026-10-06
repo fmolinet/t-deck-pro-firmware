@@ -123,6 +123,8 @@ static std::string getUInt32OptionLabel(const UInt32Option *options, uint8_t opt
 
 static bool supportsFreeTextKeyboard(const InkHUD::InkHUD *inkhud, const InkHUD::Persistence::Settings *settings)
 {
+    if (inkhud->physicalKeyboard)
+        return true;
     return !inkhud->twoWayRocker && (settings->joystick.enabled || inkhud->hasTouchEnabledProvider());
 }
 
@@ -299,6 +301,19 @@ void InkHUD::MenuApplet::show(Tile *t)
 
     // Show menu
     bringToForeground();
+}
+
+// Collect a freetext message, then offer the recipient page
+// Typed with the on-screen keyboard, or directly with a physical keyboard
+void InkHUD::MenuApplet::beginFreeText()
+{
+    OSThread::enabled = false;
+    handleFreeText = true;
+    cm.freeTextItem.rawText.erase(); // clear the previous freetext message
+    freeTextMode = true;             // render input field instead of normal menu
+    if (supportsFreeTextKeyboard(inkhud, settings))
+        inkhud->openKeyboard();
+    requestUpdate(Drivers::EInk::UpdateTypes::FAST);
 }
 
 // Auto-exit the menu applet after a period of inactivity
@@ -495,12 +510,7 @@ void InkHUD::MenuApplet::execute(MenuItem item)
         break;
 
     case FREE_TEXT:
-        OSThread::enabled = false;
-        handleFreeText = true;
-        cm.freeTextItem.rawText.erase(); // clear the previous freetext message
-        freeTextMode = true;             // render input field instead of normal menu
-        if (supportsFreeTextKeyboard(inkhud, settings))
-            inkhud->openKeyboard();
+        beginFreeText();
         break;
 
     case STORE_CANNEDMESSAGE_SELECTION: {

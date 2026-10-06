@@ -1,3 +1,5 @@
+#pragma once
+
 #include "TCA8418KeyboardBase.h"
 
 class TDeckProKeyboard : public TCA8418KeyboardBase
