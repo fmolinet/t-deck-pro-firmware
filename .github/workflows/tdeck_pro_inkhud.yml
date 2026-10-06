@@ -3,7 +3,7 @@ name: T-Deck Pro InkHUD
 on:
   push:
     branches:
-      - "t-deck-pro-**"
+      - t-deck-pro-**
   workflow_dispatch:
 
 permissions: read-all
