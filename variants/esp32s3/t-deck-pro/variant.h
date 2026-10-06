@@ -10,7 +10,9 @@
 #define I2C_SCL SCL
 
 // CST328 touch screen (implementation in src/platform/extra_variants/t_deck_pro/variant.cpp)
+#ifndef MESHTASTIC_INCLUDE_INKHUD // InkHUD build is keyboard-driven, touch stays off
 #define HAS_TOUCHSCREEN 1
+#endif
 #define CST328_PIN_INT 12
 #define CST328_PIN_RST 45
 

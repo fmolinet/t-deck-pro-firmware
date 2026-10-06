@@ -38,7 +38,8 @@ class MenuApplet : public SystemApplet, public concurrency::OSThread
     bool onTouchPoint(uint16_t x, uint16_t y, bool longPress) override;
     void onRender(bool full) override;
 
-    void show(Tile *t); // Open the menu, onto a user tile
+    void show(Tile *t);   // Open the menu, onto a user tile
+    void beginFreeText(); // Switch the open menu into freetext entry
     void setStartPage(MenuPage page);
 
   protected:

@@ -78,6 +78,7 @@ class InkHUD
     void freeText(char c);
     void freeTextDone();
     void freeTextCancel();
+    bool isFreeTextActive(); // Is a system applet currently collecting freetext?
 
     // Trigger UI changes
     // - called by various InkHUD components
@@ -91,6 +92,7 @@ class InkHUD
     void openAlignStick();
     void openKeyboard();
     void closeKeyboard();
+    void composeMessage(); // Open the menu straight into freetext entry
     void nextTile();
     void prevTile();
     bool showApplet(uint8_t appletIndex);
@@ -104,6 +106,9 @@ class InkHUD
 
     // Input mode hint for devices that use a left/right rocker plus center button
     bool twoWayRocker = false;
+
+    // Device has a physical keyboard: freetext is typed directly, on-screen keyboard is not needed
+    bool physicalKeyboard = false;
 
     // Updating the display
     // - called by various InkHUD components

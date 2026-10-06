@@ -21,6 +21,8 @@ namespace
 {
 bool supportsOnScreenKeyboard(const InkHUD::InkHUD *inkhud, const InkHUD::Persistence::Settings *settings)
 {
+    if (inkhud->physicalKeyboard)
+        return false;
     return !inkhud->twoWayRocker && (settings->joystick.enabled || inkhud->hasTouchEnabledProvider());
 }
 } // namespace
